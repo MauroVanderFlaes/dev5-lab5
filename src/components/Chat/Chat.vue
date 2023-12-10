@@ -5,39 +5,48 @@ let message = ref("");
 let allMessages = reactive({ data: [] });
 
 onMounted(async () => {
-  const storedMessages = localStorage.getItem('messages');
-  if (storedMessages) {
-    allMessages.data = JSON.parse(storedMessages);
-  } else {
-    const response = await fetch("https://lab5-p379.onrender.com/api/v1/messages/");
-    const data = await response.json();
-    allMessages.data = data;
-  }
+  const response = await fetch("https://lab5-p379.onrender.com/api/v1/messages/");
+  const data = await response.json();
+  allMessages.data = data;
 });
 
 const sendMessage = () => {
-  allMessages.data.push({ user: "user", text: message.value });
+  allMessages.data.push({ user: "Mauro", text: message.value });
+  fetch("https://lab5-p379.onrender.com/api/v1/messages/", {
+    method: "POST",
+    body: JSON.stringify({
+      user: "user",
+      text: message.value,
+    }),
 
-  // Update local storage with the new messages
-  localStorage.setItem('messages', JSON.stringify(allMessages.data));
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => console.log(json));
 
-  // Clear the input field
+  // clear input
   message.value = "";
+
 };
 </script>
 
 <template>
   <ul>
-    <li v-for="m in allMessages.data" :key="m.id">
+    <li v-for="m in allMessages.data">
       <strong>{{ m.user }}:</strong> {{ m.text }}
     </li>
   </ul>
   <div>
-    <input v-model="message" type="text" placeholder=""/>
+    <input v-model="message" type="text" placeholder="" />
     <button @click="sendMessage">Send</button>
   </div>
 </template>
 
 <style scoped>
 /* Add your styles here if needed */
+li {
+  list-style-type: none;
+}
 </style>
