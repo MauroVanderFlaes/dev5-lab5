@@ -15,7 +15,7 @@ const sendMessage = () => {
   fetch("https://lab5-p379.onrender.com/api/v1/messages/", {
     method: "POST",
     body: JSON.stringify({
-      user: "user",
+      user: "Mauro",
       text: message.value,
     }),
 
