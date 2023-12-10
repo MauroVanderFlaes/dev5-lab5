@@ -11,7 +11,7 @@ onMounted(async () => {
 });
 
 const sendMessage = () => {
-  allMessages.data.push({ user: "Mauro", text: message.value });
+  allMessages.data.unshift({ user: "Mauro", text: message.value });
   fetch("https://lab5-p379.onrender.com/api/v1/messages/", {
     method: "POST",
     body: JSON.stringify({
